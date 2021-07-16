@@ -20,7 +20,7 @@ Latent space github : https://github.com/haarnoja/sac
 
 Quick Start:
 
-Run a training job based on the original HIRO paper on Ant Push as a default setting:
+Run a training job based on the original HIRO paper on Ant Push Single as a default setting:
 (Actor  of  FDMG  :  130,  All  other  NNs:  150, a_z-state =  19)
 
 The command is the same as HIRO.
