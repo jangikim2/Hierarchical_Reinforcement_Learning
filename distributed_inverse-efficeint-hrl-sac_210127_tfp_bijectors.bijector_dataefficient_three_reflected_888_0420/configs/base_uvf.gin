@@ -1,0 +1,137 @@
+#-*-Python-*-
+import gin.tf.external_configurables
+
+create_maze_env.top_down_view = %IMAGES
+## Create the agent
+AGENT_CLASS = @UvfAgent
+UvfAgent.tf_context = %CONTEXT
+UvfAgent.actor_net = @agent/ddpg_actor_net
+###
+UvfAgent.actor_net_vae = @agent/ddpg_actor_net_vae
+UvfAgent.actor_net_real_nvp = @agent/ddpg_real_nvp_actor_net
+###
+UvfAgent.critic_net = @agent/ddpg_critic_net
+###
+UvfAgent.critic_net_vae = @agent/ddpg_critic_net_vae
+UvfAgent.critic_net_real_nvp = @agent/ddpg_critic_net_real_nvp
+###
+UvfAgent.dqda_clipping = 0.0
+UvfAgent.td_errors_loss = @tf.losses.huber_loss
+UvfAgent.target_q_clipping = %TARGET_Q_CLIPPING
+
+# Create meta agent
+META_CLASS = @MetaAgent
+MetaAgent.tf_context = %META_CONTEXT
+MetaAgent.sub_context = %CONTEXT
+###
+MetaAgent.actor_net = @meta/ddpg_actor_net_meta
+###
+MetaAgent.critic_net = @meta/ddpg_critic_net
+MetaAgent.dqda_clipping = 0.0
+MetaAgent.td_errors_loss = @tf.losses.huber_loss
+MetaAgent.target_q_clipping = %TARGET_Q_CLIPPING
+
+# Create state preprocess
+STATE_PREPROCESS_CLASS = @StatePreprocess
+StatePreprocess.ndims = %SUBGOAL_DIM
+state_preprocess_net.states_hidden_layers = (100, 100)
+state_preprocess_net.num_output_dims = %SUBGOAL_DIM
+state_preprocess_net.images = %IMAGES
+action_embed_net.num_output_dims = %SUBGOAL_DIM
+INVERSE_DYNAMICS_CLASS = @InverseDynamics
+
+# actor_net
+###
+ACTOR_HIDDEN_SIZE_1 = 150
+ACTOR_HIDDEN_SIZE_2 = 150
+ACTION_DIM = 19
+###
+agent/ddpg_actor_net.hidden_layers = (%ACTOR_HIDDEN_SIZE_1, %ACTOR_HIDDEN_SIZE_2)
+agent/ddpg_actor_net.activation_fn = @tf.nn.relu
+agent/ddpg_actor_net.zero_obs = %ZERO_OBS
+agent/ddpg_actor_net.images = %IMAGES
+###
+agent/ddpg_actor_net.action_dim = %ACTION_DIM
+###
+###
+ACTOR_HIDDEN_SIZE_1_META = 150
+ACTOR_HIDDEN_SIZE_2_META = 150
+###
+meta/ddpg_actor_net_meta.hidden_layers = (%ACTOR_HIDDEN_SIZE_1_META, %ACTOR_HIDDEN_SIZE_2_META)
+meta/ddpg_actor_net_meta.activation_fn = @tf.nn.relu
+meta/ddpg_actor_net_meta.zero_obs = False
+meta/ddpg_actor_net_meta.images = %IMAGES
+
+# actor_net_vae
+ACTOR_HIDDEN_SIZE_1_VAE = 150
+ACTOR_HIDDEN_SIZE_2_VAE = 150
+agent/ddpg_actor_net_vae.hidden_layers = (%ACTOR_HIDDEN_SIZE_1_VAE, %ACTOR_HIDDEN_SIZE_2_VAE)
+agent/ddpg_actor_net_vae.activation_fn = @tf.nn.relu
+agent/ddpg_actor_net_vae.zero_obs = %ZERO_OBS
+agent/ddpg_actor_net_vae.images = %IMAGES
+
+# critic_net_vae
+CRITIC_HIDDEN_SIZE_1_VAE = 150
+CRITIC_HIDDEN_SIZE_2_VAE = 150
+agent/ddpg_critic_net_vae.states_hidden_layers = (%CRITIC_HIDDEN_SIZE_1_VAE,)
+agent/ddpg_critic_net_vae.actions_hidden_layers = None
+agent/ddpg_critic_net_vae.joint_hidden_layers = (%CRITIC_HIDDEN_SIZE_2_VAE,)
+agent/ddpg_critic_net_vae.weight_decay = 0.0
+agent/ddpg_critic_net_vae.activation_fn = @tf.nn.relu
+agent/ddpg_critic_net_vae.zero_obs = %ZERO_OBS
+agent/ddpg_critic_net_vae.images = %IMAGES
+
+# critic_net_real_nvp
+CRITIC_HIDDEN_SIZE_1_REAL_NVP = 150
+CRITIC_HIDDEN_SIZE_2_REAL_NVP = 150
+agent/ddpg_critic_net_real_nvp.states_hidden_layers = (%CRITIC_HIDDEN_SIZE_1_REAL_NVP,)
+agent/ddpg_critic_net_real_nvp.actions_hidden_layers = None
+agent/ddpg_critic_net_real_nvp.joint_hidden_layers = (%CRITIC_HIDDEN_SIZE_2_REAL_NVP,)
+agent/ddpg_critic_net_real_nvp.weight_decay = 0.0
+agent/ddpg_critic_net_real_nvp.activation_fn = @tf.nn.relu
+agent/ddpg_critic_net_real_nvp.zero_obs = %ZERO_OBS
+agent/ddpg_critic_net_real_nvp.images = %IMAGES
+
+# critic_net
+###
+CRITIC_HIDDEN_SIZE_1 = 150
+CRITIC_HIDDEN_SIZE_2 = 150
+###
+agent/ddpg_critic_net.states_hidden_layers = (%CRITIC_HIDDEN_SIZE_1,)
+agent/ddpg_critic_net.actions_hidden_layers = None
+agent/ddpg_critic_net.joint_hidden_layers = (%CRITIC_HIDDEN_SIZE_2,)
+agent/ddpg_critic_net.weight_decay = 0.0
+agent/ddpg_critic_net.activation_fn = @tf.nn.relu
+agent/ddpg_critic_net.zero_obs = %ZERO_OBS
+agent/ddpg_critic_net.images = %IMAGES
+###
+CRITIC_HIDDEN_SIZE_1_META = 150
+CRITIC_HIDDEN_SIZE_2_META = 150
+###
+meta/ddpg_critic_net.states_hidden_layers = (%CRITIC_HIDDEN_SIZE_1_META,)
+meta/ddpg_critic_net.actions_hidden_layers = None
+meta/ddpg_critic_net.joint_hidden_layers = (%CRITIC_HIDDEN_SIZE_2_META,)
+meta/ddpg_critic_net.weight_decay = 0.0
+meta/ddpg_critic_net.activation_fn = @tf.nn.relu
+meta/ddpg_critic_net.zero_obs = False
+meta/ddpg_critic_net.images = %IMAGES
+
+tf.losses.huber_loss.delta = 1.0
+# Sample action
+uvf_add_noise_fn.stddev = 1.0
+meta_add_noise_fn.stddev = %META_EXPLORE_NOISE
+# Update targets
+###
+ddpg_update_targets_meta.tau = 0.001
+###
+ddpg_update_targets.tau = 0.001
+###
+ddpg_update_targets_vae.tau = 0.001
+ddpg_update_targets_real_nvp.tau = 0.001
+td3_update_targets_meta.tau = 0.005
+###
+td3_update_targets.tau = 0.005
+###
+td3_update_targets_vae.tau = 0.005
+td3_update_targets_real_nvp.tau = 0.005
+###
