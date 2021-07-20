@@ -1,7 +1,7 @@
 Code for performing Hierarchical RL based on the following publications:
 
 "Hierarchical Reinforcement Learning with OptimalLevel Synchronization based on a Deep GenerativeModel" by
-JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain.
+JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain (http://arxiv.org/abs/2107.08183).
 
 Requirements:
 * TensorFlow (see http://www.tensorflow.org for how to install/upgrade)
@@ -26,13 +26,7 @@ Run a training job based on the original HIRO paper on Ant Push Single as a defa
 The command is the same as HIRO.
 
 ```
-python scripts/local_train.py test1 hiro_orig ant_maze base_uvf suite
-```
-
-Run a continuous evaluation job for that experiment:
-
-```
-python scripts/local_eval.py test1 hiro_orig ant_maze base_uvf suite
+python scripts/local_train.py test1 hiro_orig ant_push_single base_uvf suite
 ```
 
 Basic Code Guide:
