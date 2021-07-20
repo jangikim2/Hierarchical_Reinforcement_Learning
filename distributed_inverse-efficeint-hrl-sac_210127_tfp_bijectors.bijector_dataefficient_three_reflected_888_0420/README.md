@@ -11,7 +11,7 @@ Requirements:
 * NumPy (see http://www.numpy.org/)
 
 The code is working on Tensorflow 1.xx.
-The detailed requirements are in written in condalist.txt and piplist.txt.
+The detailed requirements are written in condalist.txt and piplist.txt.
 
 The code combines HIRO code with Latent space code as follows.
 
