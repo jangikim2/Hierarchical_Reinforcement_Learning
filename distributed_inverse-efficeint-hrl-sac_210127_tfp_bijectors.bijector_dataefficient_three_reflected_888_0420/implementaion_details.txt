@@ -1,0 +1,46 @@
+Code for performing Hierarchical RL based on the following publications:
+
+"Hierarchical Reinforcement Learning with OptimalLevel Synchronization based on a Deep GenerativeModel" by
+JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain (http://arxiv.org/abs/2107.08183).
+
+Requirements:
+* TensorFlow (see http://www.tensorflow.org for how to install/upgrade)
+* Gin Config (see https://github.com/google/gin-config)
+* Tensorflow Agents (see https://github.com/tensorflow/agents)
+* OpenAI Gym (see http://gym.openai.com/docs, be sure to install MuJoCo as well)
+* NumPy (see http://www.numpy.org/)
+
+The code is working on Tensorflow 1.xx.
+The detailed requirements are written in condalist.txt and piplist.txt.
+
+The code combines HIRO code with Latent space code as follows.
+
+* HIRO github : https://github.com/tensorflow/models/tree/master/research/efficient-hrl
+* Latent space github : https://github.com/haarnoja/sac
+
+Please look at implementation_details.txt for the implementation detail of source code.
+
+Quick Start:
+
+Run a training job based on the original HIRO paper on Ant Push Single as a default setting:
+(Actor  of  FDMG  :  130,  All  other  NNs:  150, a_z-state =  19)
+
+The command is the same as HIRO.
+
+```
+python scripts/local_train.py test1 hiro_orig ant_push_single base_uvf suite
+```
+
+Basic Code Guide:
+
+The code for setting the size of neural network of each policy is included in two
+files, 'agents/ddpg_agent.py' and 'configs/base_uvf.gin'.
+
+The size of actor of FDMG is policy_s_t_units of BIJECTOR_PARAMS.
+All other policies's size and a_z-state are located on 'configs/base_uvf.gin'.
+
+All other coditions are the same as HIRO.
+
+
+
+Our implementation is based on HIRO open code and RealNVP in Latent. We have released our code with explanations. The definition of a goal and the intrinsic reward function of a lower-level policy defined in HIRO are used without modification. Only the implementation of the lower-level policy and off-policy correction of the HIRO open code has been changed. In addition, the implementation of RealNVP in Latent is adopted to the HIRO open code. The two-level hierarchical structure of HRL is used because the same HRL structure of HIRO is used. In the Ant environment, the dimension of state $s_{t}$ and action $a_{t,z}$ is 30 and 8, respectively. The default dimension of goal $g_{t}$ of the lower-level policy is 15. The default dimension of goal $g_{t}$ of the higher-level policy is 2 or 3 depending on the task. The main parameters which are defined in our model for all tasks are the same as those of HIRO. All other neural networks including the critic of the FDGM part except for the actor of the FDGM part, which is a RealNVP, consist of a fully connected neural network as utilized in HIRO. In order to find the best performance for each task, the parameters which are tuned for training our model are as follows. The training step used in this research is 10M steps. When our model is compared with HIRO with the same parameters, the size of the higher-level policy and lower-level policy of HIRO is defined according to Algorithm 1 or 2. Particularly in Algorithm 1, the width size of the lower-level policy of HIRO and Latent with the same parameters for the comparison is the same as that of the actor of the FDGM part of our model. Lastly, the $a_{t,z-\text{state}}$ of output of conditional part is also tuned. The size of all policies of 'Our model\textunderscore 8\textunderscore 8' in Fig. 4 is the same as that of 'Our model\textunderscore 8\textunderscore 15'. In Fig. 5, the context range of the higher-level policy of 'Our model\textunderscore 2\textunderscore 8' and 'Our model\textunderscore 3\textunderscore 8' is the same as the original context range of Ant Push Single and Ant Fall Single of HIRO respectively. The size of all policies is the same as that of our model in Fig. 4. In addition, the best size of $a_{t,z-\text{state}}$ for each experiment is chosen. As with Ant Fall Single of Fig. 4, our model in Ant Fall Single takes advantage of the combination of the inverse operation of Algorithm 2 and the size of NN of Algorithm 1. Latent takes advantage of the same inverse mechanism such as our model using RealNVP to find a goal for off-policy correction because it can support the fair comparison of experiment.
