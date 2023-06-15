@@ -18,6 +18,8 @@ The code combines HIRO code with Latent space code as follows.
 * HIRO github : https://github.com/tensorflow/models/tree/master/research/efficient-hrl
 * Latent space github : https://github.com/haarnoja/sac
 
+Please look at implementation_details.txt for the implementation detail of source code.
+
 Quick Start:
 
 Run a training job based on the original HIRO paper on Ant Push Single as a default setting:
