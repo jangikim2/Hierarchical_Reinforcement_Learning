@@ -15,8 +15,8 @@ The detailed requirements are written in condalist.txt and piplist.txt.
 
 The code combines HIRO code with Latent space code as follows.
 
-HIRO github : https://github.com/tensorflow/models/tree/master/research/efficient-hrl
-Latent space github : https://github.com/haarnoja/sac
+* HIRO github : https://github.com/tensorflow/models/tree/master/research/efficient-hrl
+* Latent space github : https://github.com/haarnoja/sac
 
 Quick Start:
 
