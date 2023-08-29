@@ -1,7 +1,7 @@
 Code for performing Hierarchical RL based on the following publications:
 
 "Hierarchical Reinforcement Learning with OptimalLevel Synchronization based on a Deep GenerativeModel" by
-JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain (http://arxiv.org/abs/2107.08183).
+JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain.
 
 Requirements:
 * TensorFlow (see http://www.tensorflow.org for how to install/upgrade)
