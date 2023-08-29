@@ -1,6 +1,6 @@
 Code for performing Hierarchical RL based on the following publications:
 
-"Hierarchical Reinforcement Learning with OptimalLevel Synchronization based on Flow-based Deep GenerativeModel" by
+"Hierarchical Reinforcement Learning with OptimalLevel Synchronization based on Flow-based Deep Generative Model" by
 JaeYoon Kim, Junyu Xuan, Christy Liang, and Farookh Hussain.
 
 Requirements:
